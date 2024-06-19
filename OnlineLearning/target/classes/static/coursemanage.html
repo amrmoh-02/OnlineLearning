@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Student from Course</title>
+</head>
+<body>
+<h1>Remove Student from Course</h1>
+
+<div>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" placeholder="Enter student username"><br>
+    <label for="course">Course:</label>
+    <input type="text" id="course" name="course" placeholder="Enter course name"><br>
+    <button onclick="removeStudentFromCourse()">Remove Student</button>
+    <div id="result"></div>
+</div>
+
+<script>
+    function removeStudentFromCourse() {
+        const username = document.getElementById('username').value;
+        const course = document.getElementById('course').value;
+
+        fetch(`/instructor/student/${username}/removeCourse`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ course })
+        })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('result').innerText = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+</body>
+</html>
