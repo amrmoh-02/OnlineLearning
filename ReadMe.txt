@@ -4,6 +4,7 @@
 - separate UI that calls the APIs exposed by services.
 - there's 3 separate DBs
 (You need internet connection to run the app)
+- extract node_modules zip file in OnlineLaerning directory before running the app
 1st run app and two microservices :
 Online Learning       	Ports auto set to:  	        8093		
 CreateCourse   						8094
