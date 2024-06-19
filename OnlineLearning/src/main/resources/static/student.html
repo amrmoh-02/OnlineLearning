@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Page</title>
+</head>
+<body>
+<h1>Welcome Student!</h1>
+<p>This is the student page.</p>
+<!-- Button to redirect to index.html on port 8096 -->
+<button onclick="redirectTor()">Make Review</button>
+
+<script>
+    // Function to redirect to index.html on port 8096
+    function redirectTor() {
+        window.location.href = 'http://localhost:8096/index.html';
+    }
+</script>
+<button onclick="redirectTocourse()">Search Courses</button>
+<script>
+    // Function to redirect to frontend.html on port 8094
+    function redirectTocourse() {
+        window.location.href = 'http://localhost:8094/course.html';
+    }
+</script>
+</body>
+</html>

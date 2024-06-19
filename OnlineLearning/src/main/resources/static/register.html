@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Learning System - Register</title>
+    <style>
+        /* Add your CSS styles here */
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Register</h2>
+    <div class="input-group">
+        <label for="userType">User Type</label>
+        <select id="userType" name="userType">
+            <option value="student">Student</option>
+            <option value="instructor">Instructor</option>
+            <option value="admin">Admin</option>
+        </select>
+    </div>
+    <div class="input-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username">
+    </div>
+    <div class="input-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email">
+    </div>
+    <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password">
+    </div>
+    <!-- Additional fields for instructor registration -->
+    <div class="instructor-fields" style="display: none;">
+        <div class="input-group">
+            <label for="instructorAffiliation">Affiliation</label>
+            <input type="text" id="instructorAffiliation" name="instructorAffiliation" placeholder="Enter your affiliation">
+        </div>
+        <div class="input-group">
+            <label for="yearsOfExperience">Years of Experience</label>
+            <input type="number" id="yearsOfExperience" name="yearsOfExperience" placeholder="Enter your years of experience">
+        </div>
+        <div class="input-group">
+            <label for="instructorBio">Bio</label>
+            <textarea id="instructorBio" name="instructorBio" placeholder="Enter your bio"></textarea>
+        </div>
+    </div>
+    <!-- Additional fields for student registration -->
+    <div class="student-fields" style="display: none;">
+        <div class="input-group">
+            <label for="studentAffiliation">Affiliation</label>
+            <input type="text" id="studentAffiliation" name="studentAffiliation" placeholder="Enter your affiliation">
+        </div>
+        <div class="input-group">
+            <label for="studentBio">Bio</label>
+            <textarea id="studentBio" name="studentBio" placeholder="Enter your bio"></textarea>
+        </div>
+        <div class="input-group">
+            <label for="enrolledCourses">Enrolled Courses</label>
+            <input type="text" id="enrolledCourses" name="enrolledCourses" placeholder="Enter your enrolled courses">
+        </div>
+    </div>
+    <button class="btn" onclick="register()">Register</button>
+    <div class="result" id="registerResult"></div>
+</div>
+
+<script>
+    // Function to show additional fields based on selected user type
+    document.getElementById('userType').addEventListener('change', function() {
+        const userType = this.value;
+        const instructorFields = document.querySelector('.instructor-fields');
+        const studentFields = document.querySelector('.student-fields');
+        if (userType === 'instructor') {
+            instructorFields.style.display = 'block';
+            studentFields.style.display = 'none';
+        } else if (userType === 'student') {
+            studentFields.style.display = 'block';
+            instructorFields.style.display = 'none';
+        } else {
+            instructorFields.style.display = 'none';
+            studentFields.style.display = 'none';
+        }
+    });
+
+    // Function to register a user
+    function register() {
+        const userType = document.getElementById('userType').value;
+        const username = document.getElementById('username').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        let requestBody = { username, email, password };
+        if (userType === 'instructor') {
+            const affiliation = document.getElementById('instructorAffiliation').value;
+            const yearsOfExperience = document.getElementById('yearsOfExperience').value;
+            const bio = document.getElementById('instructorBio').value;
+            requestBody = { ...requestBody, affiliation, yearsOfExperience, bio };
+        } else if (userType === 'student') {
+            const affiliation = document.getElementById('studentAffiliation').value;
+            const bio = document.getElementById('studentBio').value;
+            const enrolledCourses = document.getElementById('enrolledCourses').value.split(',').map(course => course.trim());
+            requestBody = { ...requestBody, affiliation, bio, enrolledCourses };
+        }
+        fetch(`/${userType}/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('registerResult').innerText = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+</body>
+</html>

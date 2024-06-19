@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instructor Page</title>
+</head>
+<body>
+
+<h1>Welcome Instructor!</h1>
+<p>This is the instructor page.</p>
+
+<!-- Button to redirect to frontend.html on port 8094 -->
+<button onclick="redirectToFrontend()">Course Management</button>
+
+<script>
+    // Function to redirect to frontend.html on port 8094
+    function redirectToFrontend() {
+        window.location.href = 'http://localhost:8094/frontend.html';
+    }
+</script>
+<!-- Button to redirect to frontend.html on port 8094 -->
+<button onclick="redirectTocs()">Student Management</button>
+
+<script>
+    // Function to redirect to coursemanage.html on port 8093
+    function redirectTocs() {
+        window.location.href = 'http://localhost:8093/coursemanage.html';
+    }
+</script>
+</body>
+</html>

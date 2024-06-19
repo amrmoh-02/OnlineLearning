@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+</head>
+<body>
+<h1>Welcome Admin!</h1>
+<p>This is the admin page.</p>
+
+<h2>Update Admin Information</h2>
+<div>
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email" placeholder="Enter new email"><br>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" placeholder="Enter new password"><br>
+    <button onclick="updateAdmin()">Update Admin</button>
+    <div id="adminResult"></div>
+</div>
+
+<h2>Get User by Username</h2>
+<div>
+    <label for="getUsername">Username:</label>
+    <input type="text" id="getUsername" name="getUsername" placeholder="Enter username"><br>
+    <button onclick="getUserByUsername()">Get User</button>
+    <div id="getUserResult"></div>
+</div>
+
+<h2>Delete User by Username</h2>
+<div>
+    <label for="deleteUsername">Username:</label>
+    <input type="text" id="deleteUsername" name="deleteUsername" placeholder="Enter username"><br>
+    <button onclick="deleteUserByUsername()">Delete User</button>
+    <div id="deleteUserResult"></div>
+</div>
+
+<h2>Edit Instructor Information</h2>
+<div>
+    <label for="editInstructorUsername">Username:</label>
+    <input type="text" id="editInstructorUsername" name="editInstructorUsername" placeholder="Enter username"><br>
+    <label for="editInstructorEmail">Email:</label>
+    <input type="text" id="editInstructorEmail" name="editInstructorEmail" placeholder="Enter new email"><br>
+    <label for="editInstructorPassword">Password:</label>
+    <input type="password" id="editInstructorPassword" name="editInstructorPassword" placeholder="Enter new password"><br>
+    <label for="editInstructorAffiliation">Affiliation:</label>
+    <input type="text" id="editInstructorAffiliation" name="editInstructorAffiliation" placeholder="Enter new affiliation"><br>
+    <label for="editInstructorExperience">Years of Experience:</label>
+    <input type="number" id="editInstructorExperience" name="editInstructorExperience" placeholder="Enter years of experience"><br>
+    <label for="editInstructorBio">Bio:</label>
+    <input type="text" id="editInstructorBio" name="editInstructorBio" placeholder="Enter new bio"><br>
+    <button onclick="editInstructor()">Edit Instructor</button>
+    <div id="editInstructorResult"></div>
+</div>
+
+<h2>Edit Student Information</h2>
+<div>
+    <label for="editStudentUsername">Username:</label>
+    <input type="text" id="editStudentUsername" name="editStudentUsername" placeholder="Enter username"><br>
+    <label for="editStudentEmail">Email:</label>
+    <input type="text" id="editStudentEmail" name="editStudentEmail" placeholder="Enter new email"><br>
+    <label for="editStudentPassword">Password:</label>
+    <input type="password" id="editStudentPassword" name="editStudentPassword" placeholder="Enter new password"><br>
+    <label for="editStudentAffiliation">Affiliation:</label>
+    <input type="text" id="editStudentAffiliation" name="editStudentAffiliation" placeholder="Enter new affiliation"><br>
+    <label for="editStudentBio">Bio:</label>
+    <input type="text" id="editStudentBio" name="editStudentBio" placeholder="Enter new bio"><br>
+    <button onclick="editStudent()">Edit Student</button>
+    <div id="editStudentResult"></div>
+</div>
+
+<script>
+    function updateAdmin() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        const username = "admin"; // Assuming admin username is known
+
+        fetch(`/admin/admin/${username}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+        })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('adminResult').innerText = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function getUserByUsername() {
+        const username = document.getElementById('getUsername').value;
+
+        fetch(`/admin/user/${username}`)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('getUserResult').innerText = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function deleteUserByUsername() {
+        const username = document.getElementById('deleteUsername').value;
+
+        fetch(`/admin/user/${username}`, {
+            method: 'DELETE'
+        })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('deleteUserResult').innerText = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function editInstructor() {
+        const username = document.getElementById('editInstructorUsername').value;
+        const email = document.getElementById('editInstructorEmail').value;
+        const password = document.getElementById('editInstructorPassword').value;
+        const affiliation = document.getElementById('editInstructorAffiliation').value;
+        const yearsOfExperience = document.getElementById('editInstructorExperience').value;
+        const bio = document.getElementById('editInstructorBio').value;
+
+        fetch(`/admin/instructor/${username}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, email, password, affiliation, yearsOfExperience, bio })
+        })
+            .then(response =>response.text())
+            .then(data => {
+                document.getElementById('editInstructorResult').innerText = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function editStudent() {
+        const username = document.getElementById('editStudentUsername').value;
+        const email = document.getElementById('editStudentEmail').value;
+        const password = document.getElementById('editStudentPassword').value;
+        const affiliation = document.getElementById('editStudentAffiliation').value;
+        const bio = document.getElementById('editStudentBio').value;
+        //const enrolledCourses = document.getElementById('editStudentEnrolledCourses').value;
+
+        fetch(`/admin/student/${username}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, email, password, affiliation, bio })
+        })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('editStudentResult').innerText = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+</script>
+<!-- Button to redirect to adminreview.html on port 8096 -->
+<button onclick="redirectToReview()">Review Management</button>
+<script>
+    // Function to redirect to adminreview.html on port 8096
+    function redirectToReview() {
+        window.location.href = 'http://localhost:8096/adminreview.html';
+    }
+</script>
+<!-- Button to redirect to frontend.html on port 8094 -->
+<button onclick="redirectToFrontend()">Course Management</button>
+<script>
+    // Function to redirect to frontend.html on port 8094
+    function redirectToFrontend() {
+        window.location.href = 'http://localhost:8094/frontend.html';
+    }
+</script>
+</body>
+</html>

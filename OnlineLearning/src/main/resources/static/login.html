@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Learning System - Login</title>
+    <style>
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Login</h2>
+    <div class="input-group">
+        <label for="userType">User Type</label>
+        <select id="userType" name="userType">
+            <option value="admin">Admin</option>
+            <option value="instructor">Instructor</option>
+            <option value="student">Student</option>
+        </select>
+    </div>
+    <div class="input-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username">
+    </div>
+    <div class="input-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password">
+    </div>
+    <button class="btn" onclick="login()">Login</button>
+    <div class="result" id="loginResult"></div>
+    <br>
+    <a href="register.html" class="btn">Register</a> <!-- This is the button for redirecting to register.html -->
+</div>
+
+<script>
+    function login() {
+        const userType = document.getElementById('userType').value;
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        fetch(`/${userType}/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        })
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('loginResult').innerText = data;
+                if (data === "Instructor login successful") {
+                    window.location.href = "instructor.html";
+                } else if (data === "Admin login successful") {
+                    window.location.href = "admin.html";
+                } else if (data === "Student login successful") {
+                    window.location.href = "student.html";
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+</script>
+</body>
+</html>
