@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+        .btn {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Course List</h2>
+
+    <!-- Search input -->
+    <div class="input-group">
+        <label for="search">Search Courses:</label>
+        <input type="text" id="search" name="search" placeholder="Enter course name" oninput="filterCourses()">
+    </div>
+
+    <!-- Button to fetch all courses -->
+    <button class="btn" onclick="getAllCourses()">Get All Courses</button>
+
+    <!-- Area to display all courses -->
+    <div class="result" id="allCoursesResult"></div>
+</div>
+
+<script>
+    let allCourses = [];
+
+    // Function to fetch all courses
+    function getAllCourses() {
+        fetch('http://localhost:8094/courses')
+            .then(response => response.json())
+            .then(data => {
+                allCourses = data;
+                displayCourses(allCourses);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('allCoursesResult').innerText = 'Error: ' + error.message;
+            });
+    }
+
+    // Function to display courses
+    function displayCourses(courses) {
+        const courseElements = courses.map(course => {
+            return `
+            <div>
+                <h3>${course.name}</h3>
+                <button class="btn" onclick="enrollCourse('${course.name}')">Enroll</button>
+            </div>
+            <hr>
+        `;
+        }).join('');
+
+        document.getElementById('allCoursesResult').innerHTML = courseElements;
+    }
+
+    // Function to filter courses based on search input
+    function filterCourses() {
+        const searchValue = document.getElementById('search').value.toLowerCase();
+        const filteredCourses = allCourses.filter(course => course.name.toLowerCase().includes(searchValue));
+        displayCourses(filteredCourses);
+    }
+
+    // Function to enroll in a course
+    function enrollCourse(courseName) {
+        const username = prompt("Enter your username:");
+        if (!username) {
+            alert("Username cannot be empty");
+            return;
+        }
+
+        // Send POST request to enroll in the course
+        fetch(`http://localhost:8093/student/${username}/enroll`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(courseName)
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert("Course enrolled successfully");
+                } else {
+                    alert("Failed to enroll in course");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Failed to enroll in course");
+            });
+    }
+</script>
+</body>
+</html>
